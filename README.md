@@ -49,4 +49,4 @@ Josh Goebel <hello@joshgoebel.com>
 - The Highlight.js GitHub project: <https://github.com/highlightjs/highlight.js>.
 - Learn more about cisco cli: <https://networking.ringofsaturn.com/Cisco/ciscocommandguide.php>.
 
-[1]: https://github.com/BMatheas/highlightjs-cisco-cli/LICENSE
+[1]: https://github.com/BMatheas/highlightjs-cisco-cli/blob/master/LICENSE
