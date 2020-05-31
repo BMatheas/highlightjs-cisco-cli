@@ -1,0 +1,27 @@
+{
+  "name": "highlightjs-cisco-cli",
+  "version": "1.0.0",
+  "description": "Cisco language grammar for highlight.js",
+  "main": "src/cisco.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BMatheas/highlightjs-cisco-cli.git"
+  },
+  "keywords": [
+    "hljs",
+    "highlightjs",
+    "cisco"
+  ],
+  "author": "Branislav Mateas",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/BMatheas/highlightjs-cisco-cli/issues"
+  },
+  "homepage": "https://github.com/BMatheas/highlightjs-cisco-cli#readme"
+}
