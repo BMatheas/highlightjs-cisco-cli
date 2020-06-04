@@ -1,5 +1,5 @@
 /*
-Language: Cisco commands
+Language: Cisco command line
 Author: Branislav Mateáš <xmatea00@stud.fit.vutbr.cz>
 Description: Based on CCNA course
 Website: https://en.wikipedia.org/wiki/CCNA
@@ -7,9 +7,9 @@ Website: https://en.wikipedia.org/wiki/CCNA
 
 hljs.registerLanguage("cisco", function(hljs){
     var command = /(?=^\s*[a-z0-9A-Z_]+(?:\(([a-zA-Z\-]*)\)#|#)|[a-zA-Z]+[0-9]\/[0-9]\z)/;
-    var ip4 = /(?:(?:(?:25[0-5]|2[0-4][0-9]|1[0-9]{2}|9[0-9]|[1-8][0-9]|[0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9]{2}|9[0-9]|[1-8][0-9]|[0-9])(?:\/(?:3[0-2]|[1-2][0-9]|[0-9]))?)\b/;
-    var ip6 = /(?![^\w:])(([0-9a-f]{1,4}:){1,7}:|:(:[0-9a-f]{1,4}){1,7}|([0-9a-f]{1,4}:){1,7}[0-9a-f]{0,4}(:[0-9a-f]{1,4}){1,7})(?![\w:])/;
-    var mac =  /(?:.{4}\.){2}(?:.{4})/;
+    var ip4 = /(?:(?:25[0-5]|2[0-4][0-9]|1[0-9]{2}|9[0-9]|[1-8][0-9]|[0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9]{2}|9[0-9]|[1-8][0-9]|[0-9])(?:\/\d{1,2})?/;
+    var ip6 = /(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))\s/;
+    var mac =  /(?:[aA0-fF9]{4}\.){2}(?:[aA0-fF9]{4})/;
     return{
         name: 'cisco',
         case_insensitive: true,
@@ -107,9 +107,9 @@ hljs.registerLanguage("cisco", function(hljs){
               contains: [{className: 'keyword', variants:[{begin: /(?<=).+(?=\[)/}, {begin: /up/}]}, {className: 'string', begin: /unassigned|administratively\sdown|down/}, {className: 'number', begin: /(?![^\w:])(([0-9a-fA-F]{1,4}:){1,7}:|:(:[0-9a-fA-F]{1,4}){1,7}|([0-9a-fA-F]{1,4}:){1,7}[0-9a-fA-F]{0,4}(:[0-9a-fA-F]{1,4}){1,7})(?![\w:])/}]
             },
             {
-              begin: /(?<=show\sip(v6)?\sroute)/,
+              begin: /(?<=show\sip(v6)?\sroute(\s\w+)?)/,
               end: command,
-              contains:[{className: 'keyword', variants: [{begin:/\s(\w|\*)(\d|(\w\w?|\w?))\s(?=\-)/}]},{className: 'number', variants:[{begin:/(?:[0-9]{1,3}\.){3}[0-9]{1,3}(\/\d+)?/},{begin:/(?![^\w:])(([0-9a-fA-F]{1,4}:){1,7}:|:(:[0-9a-fA-F]{1,4}){1,7}|([0-9a-fA-F]{1,4}:){1,7}[0-9a-fA-F]{0,4}(:[0-9a-fA-F]{1,4}){1,7})(?![\w:])(\/\d+)?/ }]},{className: 'string', variants:[{begin:/\b(\w+\d\/\d(\/\d)?)|(Null|\w{5,})\d+\b/}]}]
+              contains:[{className: 'keyword', variants: [{begin:/^[aA-zZ]\s(?:[aA-zZ]+)?/},{begin:/\s(\w|\*)(\d|(\w\w?|\w?))\s(?=\-)/}]},{className: 'number', variants:[{begin:/(?:[0-9]{1,3}\.){3}[0-9]{1,3}(\/\d+)?/},{begin:/(?![^\w:])(([0-9a-fA-F]{1,4}:){1,7}:|:(:[0-9a-fA-F]{1,4}){1,7}|([0-9a-fA-F]{1,4}:){1,7}[0-9a-fA-F]{0,4}(:[0-9a-fA-F]{1,4}){1,7})(?![\w:])(\/\d+)?/ }]},{className: 'string', variants:[{begin:/\b([aA-zZ]+\d\/\d(\/\d)?)|(Null|\w{5,})\d+\b/},{begin: /(?<=\[).+(?=\])/}]}]
             },
             {
               begin: /(?<=show\sipv6\sprotocols)/,
@@ -196,11 +196,11 @@ hljs.registerLanguage("cisco", function(hljs){
               end: command,
               contains: [{className: 'number', variants: [{begin: /(?:[0-9]{1,3}\.){3}[0-9]{1,3}(\/\d+)?/}, {begin: /\b\d+(\.\d+)?\b/}]}, {className: 'keyword', variants: [{begin: /\b[aA-zZ]+\d\/\d(\/\d)?(\.\d+)?\b/},{begin: /NULL|Local/}]}]
             },
-            {
+            /*{
               begin: /(?<=show\sip\sflow\sexport)/,
-              end: /to\sexport/,
+              end: command,
               contains: [{className: 'number', begin: /\b\d+\b/}]
-            },
+            },*/
             {
               begin: /(?<=show\sip\sinterface\s[aA-zZ]+\s*[\d\/]+)/,
               end: command,
@@ -253,7 +253,8 @@ hljs.registerLanguage("cisco", function(hljs){
               ]
             },
             {
-              begin: /^\s*[a-zA-Z0-9_\-]+(?:\((config|config-line|config-if|config-router|config-vlan|config-subif|dhcp-config|config-dhcpv6|config-std-nac1)\)#|(?:>|#))/,
+              begin: /^\s*[a-zA-Z0-9_\-]+(?:\(([a-zA-Z0-9\-]*)\)#|(?:>|#))/,
+              //begin: /^\s*[a-zA-Z0-9_\-]+(?:\((config|config-line|config-if|config-router|config-vlan|config-subif|dhcp-config|config-dhcpv6|config-std-nac1)\)#|(?:>|#))/,
               returnBegin:true,
               end: /$/,
               contains: 
@@ -270,16 +271,27 @@ hljs.registerLanguage("cisco", function(hljs){
                       variants: 
                       [
                         {
-                          begin: /(?:[0-9]{1,3}\.){3}[0-9]{1,3}/
+                          begin: ip4
                         },
                         {
                           begin: /(?![^\w:])(([0-9a-f]{1,4}:){1,7}:|:(:[0-9a-f]{1,4}){1,7}|([0-9a-f]{1,4}:){1,7}[0-9a-f]{0,4}(:[0-9a-f]{1,4}){1,7})(?![\w:])/
                         },
                         {
-                          begin: /(?<=version\s)\d+(?=$)/
+                          begin: mac,
                         },
                         {
-                          begin: /(?:loopback|fastethernet|gigabitethernet|serial|tunnel)\s*[\d\/]+/,
+                          className: 'string',
+                          begin: /\b[aA-zZ\-]+\s*\d\/\d(\/\d)?\b/,
+                        },
+                        {
+                          begin: /\b\d+/
+                        },
+                        {
+                          className: 'string',
+                          begin: /(?<=ipv6\srip).+?(?=\s)/
+                        },
+                        {
+                          begin: /(?<=version\s)\d+(?=$)/
                         },
                         {
                           className: 'string',
@@ -287,11 +299,20 @@ hljs.registerLanguage("cisco", function(hljs){
                         },
                         {
                           className: 'string',
-                          begin: /(?<=(secret|password|description|hostname|standard|domain-name|access-group|dhcp\s(pool|server))\s+).*(?=$|\W)/
+                          begin: /(?<=(access\-group|traffic\-filter)).+(?=in|out)/
+                        },
+                        {
+                          className: 'string',
+                          /* odstranil som name, interface(?!\srange), presunul som access\-group */
+                          begin: /(?<=(secret|password|router|remark|passive\-interface|eq|range|key\-string|key\schain|#\s*name|description|hostname|standard|domain-name|dhcp\s(pool|server))\s+).*(?=$|\W)/
                         },
                         {
                           className: 'string',
                           begin: /(?<=access-class\s+).+(?=in)/
+                        },
+                        {
+                          className: 'string',
+                          begin: /(?<=ip(v6)?\saccess\-list\s).+(?=$)/
                         },
                         {
                           className: 'string',
@@ -303,16 +324,37 @@ hljs.registerLanguage("cisco", function(hljs){
                         },
                         {
                           className: 'string',
-                          begin: /(?<=pool\s)[a-zA-Z\s]+(?=overload|\d)/
-                        },
-                        {
-                          begin: /(prefix|passive\sinterface|clockrate|vty|privilege\slevel|maximum|vlan\s(add|remove)|dot1q)\s/, 
-                          end:/$/, 
-                          excludeBegin: true
+                          begin: /(?<=digest\-key).+(?=md5)/
                         },
                         {
                           className: 'string',
-                          begin: /(?<=rip).+(?=enable|default-information)/
+                          begin: /(?<=pool\s)[a-zA-Z\s]+(?=overload|\d)/
+                        },
+                        {
+                          className: 'string',
+                          begin: /(?<=peer\sdefault\sip\saddress\spool).+(?=$)/
+                        },
+                        {
+                          className: 'string',
+                          begin: /(?<=snmp\-server\s(location|contact)).+(?=$)/
+                        },
+                        {
+                          className: 'string',
+                          begin: /(?<=snmp\-server\scommunity).+(?=ro)/
+                        },
+                        {
+                          className: 'string',
+                          begin: /(?<=md5).+(?=$)/
+                        },
+                        {
+                          className: 'string',
+                          begin: /(?<=(permit|deny)\s).+?(?<=\s)/
+                        },
+                        {
+                          /*odstranil som |dot1q*/
+                          begin: /(prefix|clockrate|vty|privilege\slevel|maximum|vlan(\s(add|remove))?)\s/, 
+                          end:/$/, 
+                          excludeBegin: true
                         },
                       ]
                     }
