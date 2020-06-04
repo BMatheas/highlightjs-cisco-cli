@@ -24,6 +24,7 @@ hljs.registerLanguage("cisco", function(hljs){
           className: 'comment',
           variants: 
           [
+            /* Section of "show" commands */
             {
               begin:/^VLAN\s*Name/,
               end: command,
@@ -200,11 +201,11 @@ hljs.registerLanguage("cisco", function(hljs){
               end: command,
               contains: [{className: 'number', variants: [{begin: /(?:[0-9]{1,3}\.){3}[0-9]{1,3}(\/\d+)?/}, {begin: /\b\d+(\.\d+)?\b/}]}, {className: 'keyword', variants: [{begin: /\b[aA-zZ]+\d\/\d(\/\d)?(\.\d+)?\b/},{begin: /NULL|Local/}]}]
             },
-            /*{
+            {
               begin: /(?<=show\sip\sflow\sexport)/,
               end: command,
               contains: [{className: 'number', begin: /\b\d+\b/}]
-            },*/
+            },
             {
               begin: /(?<=show\sip\sinterface\s[aA-zZ]+\s*[\d\/]+)/,
               end: command,
@@ -306,6 +307,7 @@ hljs.registerLanguage("cisco", function(hljs){
               end: command,
               contains: [{className: 'keyword', begin: /session\s+\d+/},{className: 'string', variants: [{begin: /\b[aA-zZ\-]+\d+(\/\d+(\/\d+)?)?\b/},{begin: /(?<=Type\s+:).+(?=$)/}]}]
             },
+            /* Section of cisco command keywords, argument, etc. */
             {
               begin: /^\s*[a-zA-Z0-9_\-]+(?:\(([a-zA-Z0-9\-]*)\)#|(?:>|#))/,
               returnBegin:true,
