@@ -6,9 +6,13 @@ Website: https://en.wikipedia.org/wiki/CCNA
 */
 
 hljs.registerLanguage("cisco", function(hljs){
+    /* regex for command */
     var command = /(?=^\s*[a-z0-9A-Z_]+(?:\(([a-zA-Z\-]*)\)#|#)|[a-zA-Z]+[0-9]\/[0-9]\z)/;
+    /* regex for IPv4 address */
     var ip4 = /(?:(?:25[0-5]|2[0-4][0-9]|1[0-9]{2}|9[0-9]|[1-8][0-9]|[0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9]{2}|9[0-9]|[1-8][0-9]|[0-9])(?:\/\d{1,2})?/;
+    /* regex for IPv6 address, from: https://www.regextester.com/104187*/
     var ip6 = /(?![^\w:])(([0-9a-f]{1,4}:){1,7}:|:(:[0-9a-f]{1,4}){1,7}|([0-9a-f]{1,4}:){1,7}[0-9a-f]{0,4}(:[0-9a-f]{1,4}){1,7})(?![\w:])/;
+    /* regex for MAC address in Cicso IOS notation */
     var mac =  /(?:[aA0-fF9]{4}\.){2}(?:[aA0-fF9]{4})/;
     return{
         name: 'cisco',
@@ -39,7 +43,7 @@ hljs.registerLanguage("cisco", function(hljs){
             {
               begin: /Capability\sCodes/,
               end: command,
-              contains:[{className: 'keyword', begin:/\s(\w|\*)(\d|\w?)\s(?=\-)/},{className:'comment', begin:/Port\sID/, end:/(?=^[a-zA-Z]+(\(([a-zA-Z\-]*)\)#|#)|[a-zA-Z]+[0-9]\/[0-9]\z)/, contains:[{className: 'keyword', variants:[{begin:/^\w+(?=\s)/}, {begin: /\s\w\s/}]}, {className: 'string', begin:/\s\w{1,3}\s[\d\/]+\d?/},{className:'number', begin: /\b\d+\b/}]}]
+              contains:[{className: 'keyword', begin:/\s(\w|\*)(\d|\w?)\s(?=\-)/},{className:'comment', begin:/Port\sID/, end:/(?=^[a-zA-Z]+(\(([a-zA-Z\-]*)\)#|#)|[a-zA-Z]+[0-9]\/[0-9]\z)/, contains:[{className: 'keyword', variants:[{begin:/^[\w\.]+(?=\s)/}, {begin: /\b\w\b/}]}, {className: 'string', begin:/\s\w{1,3}\s[\d\/]+\d?/},{className:'number', begin: /\b\d+\b/}]}]
             },
             {
               begin:/(?<=show\sip\snat\stranslations)/,
@@ -79,7 +83,7 @@ hljs.registerLanguage("cisco", function(hljs){
             {
               begin: /(?<=show\sinterfaces\strunk)/,
               end: command,
-              contains:[{className: 'string', begin:/(?<=\s*)[aA-zZ]+\d\/\d(?:\/\d)?/}, {className: 'number', begin:/\b\d+\b/}]
+              contains:[{className: 'string', begin:/(?<=\s*)[aA-zZ]+\d+(\/\d+(?:\/\d+)?)?/},{className: 'keyword', begin: /802\.1q/},{className: 'number', begin:/\b\d+\b/}]
             },
             {
               begin:/(?<=show\sinterfaces\s[aA-zZ]+\s*\d+(\/\d+(\/\d+)?)?\sswitchport)/, //--------------------------------------------------------------------------------------------TREBA PREROBIT NEJAK DYNAMICKY NA ROZNE INT 
@@ -253,8 +257,57 @@ hljs.registerLanguage("cisco", function(hljs){
               ]
             },
             {
+              begin:/(?<=show\sppp\smultilink)/,
+              end: command,
+            contains:[{className: 'keyword', begin: /^\s*\w+(?=,)/}, {className: 'string', variants: [{begin: /(?<=(?:name|discriminator)\sis).+(?=$)/},{begin: /\b[aA-zZ]+\d+(\/\d+(\/\d+)?)?\b/}]},{className: 'number', variants:[{begin: /\b\d+x[\daA-fF]+/},{begin: /\b\d+/}]}]
+            },
+            {
+              begin: /(?<=show\sip\slocal\spool)/,
+              end: command,
+            contains: [{className: 'keyword', begin: /(?<=^)\s*(?!Pool)\w+?(?=\s)/},{className: 'number', variants: [{begin: ip4},{begin: /\b\d+/}]}] 
+            },
+            {
+              begin: /(?<=show\spppoe\ssession)/,
+              end: command,
+              contains: [{className: 'number', variants: [{begin: mac}, {begin: /\b\d+/}]},{className: 'string', begin: /\b[aA-zZ\-]+\d+(\/\d+(\/\d+)?)?\b/}]
+            },
+            {
+              begin: /(?<=show\sntp\sstatus)/,
+              end: command,
+              contains: [{className: 'keyword', begin: ip4},{className: 'number', variants:[{begin: /\b\d+(\.\d+)?/}]}]
+            },
+            {
+              begin: /(?<=show\sclock)/,
+              end: command,
+              contains: [{className: 'string', begin: /\b[aA-zZ]+\b/},{className: 'number', begin: /\b\d+/}]
+            },
+            {
+              begin: /(?<=show\sntp\sassociations)/,
+              end: command,
+              contains: [{className: 'keyword', begin: ip4},{className: 'number', begin: /\b\d+(\.\d+)?/}]
+            },
+            {
+              begin: /(?<=show\scontrollers(?:\s*[aA-zZ\-]+\d+(?:\/\d+(?:\/\d+)?)?)?)/,
+              end: command,
+              contains: [{className: 'number', variants: [{begin: /0(x|X)[0-9a-fA-F]+/},{begin: /\b[\da-fA-F]{4}\b/},{begin: /\b\d+(\.\d+)?/}]}]
+            },
+            {
+              begin: /(?<=show\sip\sdhcp\sserver\sstatistics)/,
+              end: command,
+            contains: [{className: 'keyword', begin: /(?<=^\s*)(?!Message).+?(?=\d)/},{className: 'number', begin: /\b\d+/}]
+            },
+            {
+              begin: /(?<=show\slogging)/,
+              end: command,
+              contains: [{className: 'number', begin: /\b\d+/},{className: 'keyword', begin: /\b[aA-zZ]+\slogging:/}]
+            },
+            {
+              begin: /(?<=show\smonitor)/,
+              end: command,
+              contains: [{className: 'keyword', begin: /session\s+\d+/},{className: 'string', variants: [{begin: /\b[aA-zZ\-]+\d+(\/\d+(\/\d+)?)?\b/},{begin: /(?<=Type\s+:).+(?=$)/}]}]
+            },
+            {
               begin: /^\s*[a-zA-Z0-9_\-]+(?:\(([a-zA-Z0-9\-]*)\)#|(?:>|#))/,
-              //begin: /^\s*[a-zA-Z0-9_\-]+(?:\((config|config-line|config-if|config-router|config-vlan|config-subif|dhcp-config|config-dhcpv6|config-std-nac1)\)#|(?:>|#))/,
               returnBegin:true,
               end: /$/,
               contains: 
@@ -295,7 +348,7 @@ hljs.registerLanguage("cisco", function(hljs){
                         },
                         {
                           className: 'string',
-                          begin: /(?<=username\s+).+(?=secret|password)/
+                          begin: /(?<=username\s+).+?(?=privilege|secret|password)/
                         },
                         {
                           className: 'string',
@@ -303,7 +356,6 @@ hljs.registerLanguage("cisco", function(hljs){
                         },
                         {
                           className: 'string',
-                          /* odstranil som name, interface(?!\srange), presunul som access\-group */
                           begin: /(?<=(secret|password|router|remark|passive\-interface|eq|range|key\-string|key\schain|#\s*name|description|hostname|standard|domain-name|dhcp\s(pool|server))\s+).*(?=$|\W)/
                         },
                         {
@@ -348,10 +400,9 @@ hljs.registerLanguage("cisco", function(hljs){
                         },
                         {
                           className: 'string',
-                          begin: /(?<=(permit|deny)\s).+?(?<=\s)/
+                          begin: /(?<=(permit|deny)\s).+?(?=\s)/
                         },
                         {
-                          /*odstranil som |dot1q*/
                           begin: /(prefix|clockrate|vty|privilege\slevel|maximum|vlan(\s(add|remove))?)\s/, 
                           end:/$/, 
                           excludeBegin: true
