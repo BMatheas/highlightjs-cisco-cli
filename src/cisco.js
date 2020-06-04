@@ -5,7 +5,7 @@ Description: Based on CCNA course
 Website: https://en.wikipedia.org/wiki/CCNA
 */
 
-hljs.registerLanguage("cisco", function(hljs){
+export default function(hljs){
     /* regex for command */
     var command = /(?=^\s*[a-z0-9A-Z_]+(?:\(([a-zA-Z\-]*)\)#|#)|[a-zA-Z]+[0-9]\/[0-9]\z)/;
     /* regex for IPv4 address */
@@ -419,4 +419,4 @@ hljs.registerLanguage("cisco", function(hljs){
         },
       ],
     }
-});
+}
