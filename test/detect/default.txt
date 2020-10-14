@@ -1,3 +1,4 @@
 Router#show run
 Router(config)#interface FastEthernet0/0
 Router(config)#username Brano password Cisco
+Router(config)#no service-password encryption
